@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] =useState("");
-  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const handleLogin = () =>{
@@ -13,16 +12,15 @@ const Login = () => {
       navigate("/admin")
     }
     else{
-      setError("invalid email or password")
+      alert("Wrong email or password");
     }
   }
   return (
-    <div style={{width: "40%", margin:"auto", marginTop: 100}}>
-        <h3>Login</h3>
+    <div style={{width: "50%", textAlign: "center", margin: "auto"}}>
+        <h3>Login Page</h3>
         <input type="email" placeholder='Enter email' value={email} onChange={(e) => setEmail(e.target.value)}/><br/>
         <input type='password' placeholder='Enter password' value={password} onChange={(e) => setPassword(e.target.value)} /><br/>
         <button onClick={handleLogin}>Login</button>
-        {error && <p style={{color: "red", fontSize: "20px"}}>{error}</p>}
     </div>
   )
 }

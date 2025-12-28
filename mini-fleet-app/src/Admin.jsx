@@ -5,11 +5,11 @@ function Admin() {
     const [data, setData] = useState("");
     const navigate = useNavigate();
 
-    function handleLogout() {
-        setData("");
-        navigate("/login");
-        alert("Logged out successfully");    
+    const handleLogout = () => {
+        localStorage.removeItem("isLoggedIn")
+        navigate("/login")
     }
+    
     function handleAddFleet (e) {
         e.preventDefault();
         setData("");
