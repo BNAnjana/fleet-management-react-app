@@ -1,28 +1,65 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from './AuthContext';
 
-const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] =useState("");
+export default function Login() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const emailRef = useRef(null);
   const navigate = useNavigate();
+  const { isAuthenticated, login } = useAuth();
 
-  const handleLogin = () =>{
-    if(email === "admin@gmail.com" && password === "admin1234"){
-      localStorage.setItem("isLoggedIn","true");
-      navigate("/admin")
+  useEffect(() => {
+    // Focus email input on mount
+    emailRef.current?.focus();
+  }, []);
+
+  useEffect(() => {
+    // If already authenticated, go to admin
+    if (isAuthenticated) navigate('/admin', { replace: true });
+  }, [isAuthenticated, navigate]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const validEmail = 'admin@gmail.com';
+    const validPassword = 'admin1234';
+
+    if (email.trim() === validEmail && password === validPassword) {
+      alert('Login success');
+      login();
+      navigate('/admin', { replace: true });
+    } else {
+      alert('Wrong email or password');
     }
-    else{
-      alert("Wrong email or password");
-    }
-  }
+  };
+
   return (
-    <div style={{width: "50%", textAlign: "center", margin: "auto"}}>
-        <h3>Login Page</h3>
-        <input type="email" placeholder='Enter email' value={email} onChange={(e) => setEmail(e.target.value)}/><br/>
-        <input type='password' placeholder='Enter password' value={password} onChange={(e) => setPassword(e.target.value)} /><br/>
-        <button onClick={handleLogin}>Login</button>
+    <div className="login-container">
+      <form className="login-form" onSubmit={handleSubmit}>
+        <h2>Login</h2>
+        <label>
+          Email
+          <input
+            ref={emailRef}
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="admin@gmail.com"
+            required
+          />
+        </label>
+        <label>
+          Password
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="admin1234"
+            required
+          />
+        </label>
+        <button type="submit">Login</button>
+      </form>
     </div>
-  )
+  );
 }
-
-export default Login;
